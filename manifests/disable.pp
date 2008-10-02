@@ -1,7 +1,7 @@
 # manifests/disable.pp
 # disable sendmail
 
-class sendmail::disable inherits sendmail {
+class sendmail::disable inherits sendmail::base {
     Package[sendmail]{
         ensure => absent,
     }

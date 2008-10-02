@@ -7,7 +7,7 @@
 
 class sendmail::localonly inherits sendmail {
     case $sendmail_mailroot {
-        '': { fail("you need to define \$sendmail_mailroot to use this feature") }
+        '': { fail("you need to define \$sendmail_mailroot on ${fqdn} to use this feature") }
     }
 
     sendmail::mailalias{'root':
