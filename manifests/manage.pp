@@ -26,7 +26,10 @@ class sendmail::manage {
     }
 
     exec{sendmail_make:
-        command => '/usr/bin/make -C /etc/mail',
+        command => $kernel ? {
+            openbsd => 'cd /etc/mail && /usr/bin/make'
+            default => '/usr/bin/make -C /etc/mail',
+        },
         refreshonly => true,
         require => $operatingsystem ? {
             linux => Package[sendmail],
