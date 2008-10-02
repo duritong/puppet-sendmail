@@ -16,7 +16,6 @@ class sendmail::localonly inherits sendmail {
 
     file{"/etc/mail/virtusertable":
         notify => Exec[sendmail_make],
-        require => Package[sendmail],
         mode => 0644, owner => root, group => 0;
     }
     case $sendmail_localonly_virtusertable_src {
