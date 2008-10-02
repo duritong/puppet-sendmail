@@ -11,6 +11,7 @@ class sendmail::manage {
         target => '/etc/aliases',
         require => $operatingsystem ? {
             linux => Package[sendmail],
+            default => undef,
         },
         notify => Exec['newaliases'],
     }
@@ -20,6 +21,7 @@ class sendmail::manage {
         refreshonly => true,
         require => $operatingsystem ? {
             linux => Package[sendmail],
+            default => undef,
         },
     }
 
@@ -28,6 +30,7 @@ class sendmail::manage {
         refreshonly => true,
         require => $operatingsystem ? {
             linux => Package[sendmail],
+            default => undef,
         },
     }
 }
