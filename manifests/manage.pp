@@ -8,7 +8,10 @@
 class sendmail::manage {
 
     Mailalias { 
-        target => '/etc/aliases',
+        target => $operatingsystem ? {
+            openbsd => '/etc/mail/aliases',
+            default => '/etc/aliases',
+        },
         require => $operatingsystem ? {
             linux => Package[sendmail],
             default => undef,
