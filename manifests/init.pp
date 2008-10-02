@@ -14,7 +14,9 @@
 # modules_dir { "sendmail": }
 
 class sendmail {
-    include sendmail::base
+    case $kernel {
+        linux: { include sendmail::base }
+    }
 
     exec{sendmail_make:
         command => 'cd /etc/mail/ && make',
@@ -39,3 +41,4 @@ class sendmail::base {
         require => Package[sendmail],
     }
 }
+
