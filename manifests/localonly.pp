@@ -1,27 +1,34 @@
 # manifests/localonly.pp
 # manages sendmail installations
-# which use sendmail only localy
+# which use sendmail only locally
+#
+# when you set $sendmail_localonly_virtusertable_src
+# to a puppet url this file will be used as your virtusertable
 
 class sendmail::localonly inherits sendmail {
-    file{"/etc/aliases":
-        source => [ "puppet://$server/files/sendmail/aliases/aliases.${operatingsystem}",
-                    "puppet://$server/files/sendmail/aliases/aliases",
-                    "puppet://$server/sendmail/aliases/aliases.${operatingsystem}",
-                    "puppet://$server/sendmail/aliases/aliases" ],
-        require => Package[sendmail],
-        notify => Exec[newaliases],
-        mode => 0644, owner => root, group => 0;
+    case $sendmail_mailroot {
+        '': { fail("you need to define \$sendmail_mailroot to use this feature") }
     }
 
-    $real_sendmail_mailroot = $sendmail_mailroot ? {
-        '' => 'monitor@ww2.ch',
-        default => $sendmail_mailroot
+    sendmail::mailalias{'root':
+        recipient => $sendmail_mailroot,
     }
 
     file{"/etc/mail/virtusertable":
-        content => template("sendmail/virtusertable/virtusertable.${operatingsystem}"),
         notify => Exec[sendmail_make],
         require => Package[sendmail],
         mode => 0644, owner => root, group => 0;
+    }
+    case $sendmail_localonly_virtusertable_src {
+        '': {
+                File['/etc/mail/virtusertable']{
+                    content => template("sendmail/virtusertable/virtusertable.${operatingsystem}"),
+                }
+            }
+        default: {
+                File['/etc/mail/virtusertable']{
+                    source => $sendmail_localonly_virtusertable_src,
+                }
+            }
     }
 }

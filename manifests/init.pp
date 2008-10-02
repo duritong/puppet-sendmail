@@ -13,20 +13,16 @@
 
 # modules_dir { "sendmail": }
 
+import 'defines.pp'
+
 class sendmail {
     case $kernel {
         linux: { include sendmail::base }
     }
+    include sendmail::manage
 
-    exec{sendmail_make:
-        command => 'cd /etc/mail/ && make',
-        refreshonly => true,
-        require => Package[sendmail],
-    }
-    exec{newaliases:
-        command => '/usr/bin/newaliases',
-        refreshonly => true,
-        require => Package[sendmail],
+    if $use_munin {
+        include sendmail::munin
     }
 }
 
