@@ -9,19 +9,25 @@ class sendmail::manage {
 
     Mailalias { 
         target => '/etc/aliases',
-        require => Package[sendmail],
+        require => $operatingsystem ? {
+            linux => Package[sendmail],
+        },
         notify => Exec['newaliases'],
     }
 
     exec{'newaliases':
         command => '/usr/bin/newaliases',
         refreshonly => true,
-        require => Package[sendmail],
+        require => $operatingsystem ? {
+            linux => Package[sendmail],
+        },
     }
 
     exec{sendmail_make:
         command => '/usr/bin/make -C /etc/mail',
         refreshonly => true,
-        require => Package[sendmail],
+        require => $operatingsystem ? {
+            linux => Package[sendmail],
+        },
     }
 }
