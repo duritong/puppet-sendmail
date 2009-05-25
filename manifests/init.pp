@@ -11,10 +11,6 @@
 # the Free Software Foundation.
 #
 
-# modules_dir { "sendmail": }
-
-import 'defines.pp'
-
 class sendmail {
     case $kernel {
         linux: { include sendmail::base }
