@@ -1,5 +1,3 @@
-# manifests/sendmail/defines.pp
-
 define sendmail::mailalias(
     $ensure = 'present',
     $recipient,
