@@ -10,13 +10,3 @@ class sendmail::disable inherits sendmail {
     }
 }
 
-class sendmail::disable::base inherits sendmail::base {
-    Package[sendmail]{
-        ensure => absent,
-    }
-
-    Service[sendmail]{
-        enable => false,
-        ensure => stopped,
-    }
-}
