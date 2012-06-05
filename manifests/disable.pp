@@ -2,11 +2,10 @@
 # disable sendmail
 
 class sendmail::disable inherits sendmail {
-    case $kernel {
+    case $::kernel {
         linux: { include sendmail::disable::base }
     }
-    if $use_munin {
+    if hiera('use_munin',false) {
         include sendmail::munin::disable
     }
 }
-

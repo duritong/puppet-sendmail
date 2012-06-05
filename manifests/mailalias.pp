@@ -6,8 +6,8 @@ define sendmail::mailalias(
     include sendmail::newaliases
 
     case $target {
-        'absent': { 
-            $real_target = $operatingsystem ? {
+        'absent': {
+            $real_target = $::operatingsystem ? {
                 openbsd => '/etc/mail/aliases',
                 default => '/etc/aliases',
             }
@@ -15,7 +15,7 @@ define sendmail::mailalias(
         default: { $real_target = $target }
     }
 
-    mailalias{"$name":
+    mailalias{$name:
         ensure => $ensure,
         recipient => $recipient,
         target => $real_target,

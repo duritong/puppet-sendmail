@@ -39,5 +39,5 @@
 # MASQUERADE_DOMAIN and MASQUERADE_DOMAIN_FILE). If VIRTUSER_DOMAIN or
 # VIRTUSER_DOMAIN_FILE is used, then the entries of class {VirtHost} are
 # added to class {R}, i.e., relaying is allowed to (and from) those domains.
-@<%= fqdn %>    <%= sendmail_mailroot %>
+@<%= scope.lookupvar('::fqdn') %>    <%= scope.lookupvar('sendmail::mailroot') %>
 
