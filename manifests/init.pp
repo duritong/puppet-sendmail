@@ -12,7 +12,8 @@
 #
 
 class sendmail(
-  $mailroot = hiera('sendmail_mailroot', "root@${::domain}")
+  $mailroot     = "root@${::domain}",
+  $manage_munin = false
 ) {
   case $::kernel {
     linux: { include sendmail::base }
@@ -20,7 +21,7 @@ class sendmail(
 
   include sendmail::manage
 
-  if hiera('use_munin',false) {
+  if $sendmail::manage_munin {
     include sendmail::munin
   }
 }
