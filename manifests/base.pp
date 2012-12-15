@@ -4,8 +4,9 @@ class sendmail::base {
   }
 
   service{sendmail:
-    enable => true,
-    ensure => running,
-    require => Package[sendmail],
+    enable    => true,
+    ensure    => running,
+    hasstatus => true,
+    require   => Package[sendmail],
   }
 }
