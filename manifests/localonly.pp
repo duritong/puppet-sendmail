@@ -4,37 +4,35 @@
 #
 # when you set $sendmail_localonly_virtusertable_src
 # to a puppet url this file will be used as your virtusertable
-
 class sendmail::localonly(
-  $manage_shorewall = false,
-  $ocalonly_virtusertable_src = ''
+  $manage_shorewall            = false,
+  $localonly_virtusertable_src = false,
 ) {
-
-  class{'sendmail':
+  class{'::sendmail':
     manage_shorewall => $manage_shorewall
   }
   sendmail::mailalias{'root':
-    recipient => sendmail::mailroot,
+    recipient => $sendmail::mailroot,
   }
 
-  file{"/etc/mail/virtusertable":
+  file{'/etc/mail/virtusertable':
     notify => Exec[sendmail_make],
-    require => $::kernel ? {
-      linux => Package[sendmail],
-      default => undef,
-    },
-    mode => 0644, owner => root, group => 0;
+    owner => root,
+    group => 0,
+    mode  => '0644';
   }
-  case $localonly_virtusertable_src {
-    '': {
-      File['/etc/mail/virtusertable']{
-        content => template("sendmail/virtusertable/virtusertable.${::operatingsystem}")
-      }
+  if $::kernel == 'Linux' {
+    File['/etc/mail/virtusertable']{
+      require => Package['sendmail'],
     }
-    default: {
-      File['/etc/mail/virtusertable']{
-        source => $localonly_virtusertable_src,
-      }
+  }
+  if $localonly_virtusertable_src {
+    File['/etc/mail/virtusertable']{
+      source => $localonly_virtusertable_src,
+    }
+  } else {
+    File['/etc/mail/virtusertable']{
+      content => template("sendmail/virtusertable/virtusertable.${::operatingsystem}")
     }
   }
 }
