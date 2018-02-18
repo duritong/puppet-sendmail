@@ -1,3 +1,4 @@
+# manage a mailalias more conveniently.
 define sendmail::mailalias(
   Enum['present','absent'] $ensure    = 'present',
   Optional[String]         $recipient = undef,
@@ -6,13 +7,13 @@ define sendmail::mailalias(
   if $ensure == 'present' and !$recipient {
     fail('Must pass recipient if ensure is present')
   }
-  include sendmail::newaliases
+  include ::sendmail::newaliases
 
   case $target {
     'absent': {
-      $real_target = $::operatingsystem ? {
-        openbsd => '/etc/mail/aliases',
-        default => '/etc/aliases',
+      $real_target = $facts['operatingsystem'] ? {
+        'OpenBSD' => '/etc/mail/aliases',
+        default   => '/etc/aliases',
       }
     }
     default: { $real_target = $target }
