@@ -1,8 +1,8 @@
-# manifests/classes/newaliases.pp
-
+# refresh newaliases file
 class sendmail::newaliases {
-    exec{'refresh_aliases':
-        command => 'newaliases',
-        refreshonly => true,
-    }
+  Exec<| title == 'manage_alternatives_mta' |> ->
+  exec{'refresh_aliases':
+    command     => 'newaliases',
+    refreshonly => true,
+  }
 }
